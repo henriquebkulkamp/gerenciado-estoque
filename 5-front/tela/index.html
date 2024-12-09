@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Tabela</title>
+</head>
+<body>
+    <h1 style="text-align: center;">Minha Tabela</h1>
+    <section>
+        <img class="toggle" src="./angulo-pequeno-para-baixo.svg" onclick="toggleTable()"/>
+        <table id="main-table">
+            <thead>
+                <tr>
+                    <th class="group-name">Coluna 1</th>
+                    <th>Qtde em estoque</th>
+                    <th>Qtde Mínima</th>
+                    <th>Qtde Agendada de Compra</th>
+                    <th>Situação</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- <tr>
+                    <td class="product-name"><span class="square"></span>Produto1</td>
+                    <td>Dados 2</td>
+                    <td>Dados 3</td>
+                    <td>Dados 4</td>
+                    <td>Dados 5</td>
+                </tr>
+                <tr>
+                    <td class="product-name"><span class="square"></span>Produto2</td>
+                    <td>Dados 2</td>
+                    <td>Dados 3</td>
+                    <td>Dados 4</td>
+                    <td>Dados 5</td>
+                </tr>
+                <tr>
+                    <td class="product-name"><span class="square"></span>Produto3</td>
+                    <td>Dados 2</td>
+                    <td>Dados 3</td>
+                    <td>Dados 4</td>
+                    <td>Dados 5</td>
+                </tr> -->
+                <tr class="new-item">
+                    <td><span class="square-add"></span>Mais</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <script>
+        const table = document.getElementById('main-table');
+        const rows = table.querySelectorAll('tbody tr');
+        const tbody = table.querySelector('tbody');
+
+        function toggleTable() {
+            const table = document.getElementById('main-table');
+            const tbody = table.querySelector('tbody');
+            const button = document.querySelector('.toggle');
+            
+            if (tbody.style.display === 'none') {
+                tbody.style.display = ''; // Mostra as linhas
+                button.style.transform = 'rotate(0deg)';
+
+            } else {
+                tbody.style.display = 'none'; // Esconde as linhas
+                button.style.transform = 'rotate(-90deg)';
+            }
+        }
+        
+        function push_row(name, qtde_estoque, qtde_min, qtde_agendada, situacao) {
+            const new_row = document.createElement('tr');
+            valores = [name, qtde_estoque, qtde_min, qtde_agendada, situacao];
+
+            valores.forEach(valor => {
+                const new_cell = document.createElement('td');
+                new_cell.textContent = valor
+                new_row.append(new_cell)
+            });
+            tbody.appendChild(new_row)
+        }
+        window.socketAPI.updateCell((event, data) => {
+            for (let i=0; i<data.length; i++) {
+                const name = Object.keys(data[i])[0]
+
+                push_row(name, data[i][name]['Quantidade-Atual'], "---", "---", "sla");
+            }
+        });
+
+    </script>
+</body>
+</html>

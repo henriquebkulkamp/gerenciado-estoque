@@ -1,0 +1,22 @@
+# Node.js
+*/node_modules/
+
+# Arquivos de log
+*.log
+
+# Arquivos temporários do sistema
+.DS_Store
+Thumbs.db
+
+# Variáveis de ambiente
+.env
+
+# Diretórios de build
+/dist
+/build
+/target
+
+.vscode
+1-erp/node_modules/
+5-front/node_modules/
+delimitador/target

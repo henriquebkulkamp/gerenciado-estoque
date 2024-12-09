@@ -1,0 +1,79 @@
+:root {
+    --color-products: rgb(126, 165, 250);
+    --color-products-add: rgb(199, 193, 255);
+}
+
+section {
+    vertical-align: baseline;
+    display:flex;
+    margin-left: 3vw;
+}
+
+table {
+    border-collapse: separate;
+    border-spacing: 0 2px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    background-color: #eee;
+    padding: 10px;
+}
+th {
+    background-color: rgba(0, 0, 0, 0);
+    padding-right: 20px;
+    padding-left: 20px;
+}
+
+td {
+    text-align: center;
+    position: relative;
+}
+
+.group-name {
+    text-align: left;
+    color:var(--color-products);
+}
+
+.new-item td {
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.product-name {
+    position: relative;
+}
+
+.square {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 5px;
+    height: 100%;
+    background-color: var(--color-products);
+    transform: translateY(-50%);
+}
+
+.square-add {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 5px;
+    height: 100%;
+    background-color: var(--color-products-add);
+    transform: translateY(-50%);
+}
+
+.toggle {
+    position: relative;
+    height: 1.5em;
+    padding: 10px 15px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.toggle:hover {
+    content: url(botao-abrir-hover.svg)
+}
