@@ -1,9 +1,3 @@
--- Serão 3 tabelas:
--- 1° usuario, cada usuario terá um id, nome e acesso as informações de alguns produtos
--- 2° produto, será uma tabela com id, nome, qtde atual, "quem tem acesso", preco,
---     p (prob de perder cada produto) e quantidade demandada.
--- 3° tabela que relaciona cada pessoa com um "quem tem acesso".
-
 -- Tabela usuario
 CREATE TABLE usuario (
     id SERIAL PRIMARY KEY,     -- Identificador único do usuário
@@ -15,9 +9,9 @@ ON usuario USING hash (nome);
 
 
 CREATE TABLE grupo_acesso (
-    id SERIAL NOT NULL,               -- Identificador único do grupo de acesso
-    usuario_id INTEGER NOT NULL,      -- Usuário associado ao grupo
-    CONSTRAINT pk_grupo_acesso PRIMARY KEY (id, usuario_id),  -- Chave primária composta
+    id SERIAL NOT NULL,
+    usuario_id INTEGER NOT NULL,
+    CONSTRAINT pk_grupo_acesso PRIMARY KEY (id, usuario_id),
     CONSTRAINT fk_usuario FOREIGN KEY (usuario_id) REFERENCES usuario (id) ON DELETE CASCADE
 );
 
@@ -33,10 +27,7 @@ CREATE TABLE produto (
     preco NUMERIC(10, 2) NOT NULL,     -- Preço do produto
     p NUMERIC(5, 2) NOT NULL,          -- Probabilidade de perder o produto (0-1)
     quantidade_demandada INTEGER NOT NULL, -- Quantidade demandada
-    grupo_acesso_id INTEGER NOT NULL,  -- Grupo de acesso ao qual o produto pertence
-    CONSTRAINT fk_grupo_acesso 
-        FOREIGN KEY (grupo_acesso_id) 
-        REFERENCES grupo_acesso (id) ON DELETE CASCADE
+    grupo_acesso_id INTEGER NOT NULL   -- Grupo de acesso ao qual o produto pertence
 );
 
 CREATE INDEX idx_produto_grupo_acesso_id_btree

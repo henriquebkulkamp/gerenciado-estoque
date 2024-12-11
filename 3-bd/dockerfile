@@ -1,0 +1,15 @@
+# Usa a imagem oficial do PostgreSQL como base
+FROM postgres:latest
+
+# Define as variáveis de ambiente para o PostgreSQL
+ENV POSTGRES_PASSWORD=postgres
+ENV POSTGRES_DB=postgres
+
+# Mapeia o volume do host para o contêiner
+VOLUME ["/bd"]
+
+# Define a porta que será exposta
+EXPOSE 5432
+
+# Define o comando padrão do contêiner
+CMD ["postgres"]

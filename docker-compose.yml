@@ -1,0 +1,13 @@
+version: "3.9"
+services:
+  testpostgres:
+    build:
+      context: ./3-bd # Diretório onde o Dockerfile está localizado
+    container_name: ${CONTAINER_NAME} # Usando a variável de ambiente do .env
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD} # Usando a variável de ambiente do .env
+      POSTGRES_DB: ${POSTGRES_DB} # Usando a variável de ambiente do .env
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./3-bd:/bd # Mapeia o diretório 3-bd para o contêiner

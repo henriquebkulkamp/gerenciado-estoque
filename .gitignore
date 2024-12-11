@@ -1,5 +1,5 @@
 # Node.js
-*/node_modules/
+*/node_modules
 
 # Arquivos de log
 *.log
@@ -12,11 +12,5 @@ Thumbs.db
 .env
 
 # Diretórios de build
-/dist
-/build
-/target
-
 .vscode
-1-erp/node_modules/
-5-front/node_modules/
 delimitador/target

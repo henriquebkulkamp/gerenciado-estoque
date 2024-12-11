@@ -61,4 +61,4 @@ VALUES
     ('Produto AZ', 240, 60.00, 0.04, 70,  3),  -- Grupo 3
     ('Produto BA', 260, 65.00, 0.05, 80,  3),  -- Grupo 3
     ('Produto BB', 280, 70.00, 0.09, 90,  4),  -- Grupo 4
-    ('Produto BC', 300, 75.00, 0.03, 100, 4); -- Grupo 4
+    ('Produto BC', 300, 75.00, 0.03, 100, 4);  -- Grupo 4
