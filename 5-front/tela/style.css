@@ -3,6 +3,10 @@
     --color-products-add: rgb(199, 193, 255);
 }
 
+h1 {
+    text-align: center;
+}
+
 section {
     vertical-align: baseline;
     display:flex;

@@ -1,9 +1,9 @@
 import axios from 'axios';
 import express from 'express';
 import dotenv from 'dotenv'; 
-import Produto from './models/produto.js'; // Importa o modelo Produto
-import Usuario from './models/usuario.js'; // Importa o modelo Usuario
-import GrupoAcesso from './models/grupo_acesso.js'; // Importa o modelo GrupoAcesso
+import Produto from './models/produto.js';
+import Usuario from './models/usuario.js';
+import GrupoAcesso from './models/grupo_acesso.js';
 dotenv.config({ path: '../.env' });
 
 const app = express();
@@ -14,26 +14,25 @@ const port_4_g = parseInt(process.env.PORTA_4_G, 10);
 app.use(express.json());
 
 app.get('/setup', (req, res) => {
+    console.log(req.query.name)
     // Faz a requisição para o ERP
     axios.get(`http://localhost:${port_1_erp}/setup`)
         .then(async (response) => {
             console.log('Resposta da requisição:', response.data);
-
-            // Realiza a consulta no banco de dados utilizando Sequelize
             try {
                 const produtos = await Produto.findAll({
                     attributes: ['id', 'nome', 'qtde_atual', 'preco', 'p', 'quantidade_demandada'], // Seleciona apenas os campos desejados de Produto
                     include: [{
                         model: GrupoAcesso,
                         as: 'grupo_acesso',
-                        required: true, // Garante o INNER JOIN com GrupoAcesso
-                        attributes: [], // Exclui todos os campos de GrupoAcesso
+                        required: true,
+                        attributes: [],
                         include: [{
                             model: Usuario,
                             as: 'usuario',
-                            required: true, // Garante o INNER JOIN com Usuario
-                            attributes: [], // Exclui todos os campos de Usuario
-                            where: { nome: 'Maria' }, // Aplica o filtro
+                            required: true,
+                            attributes: [],
+                            where: { nome: req.query.name },
                         }],
                     }],
                 });
