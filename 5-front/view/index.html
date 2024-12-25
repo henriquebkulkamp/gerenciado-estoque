@@ -21,9 +21,6 @@
                 </tr>
             </thead>
             <tbody id="table-body">
-                <tr class="new-item">
-                    <td><span class="square-add"></span>Mais</td>
-                </tr>
             </tbody>
         </table>
     </section>
@@ -65,11 +62,11 @@
                     situacao = 'alto';
 
                 row.innerHTML = `
-                    <td>${nome}</td>
+                    <td><span class="square"></span>${nome}</td>
                     <td>${qtde_em_estoque}</td>
                     <td>${qtde_minima}</td>
                     <td>${qtde_agendada_de_compra}</td>
-                    <td>${situacao}</td>
+                    <td style="color: ${situacao=='ok' ? 'green' : 'red'}">${situacao}</td>
                 `;
 
                 tableBody.appendChild(row);

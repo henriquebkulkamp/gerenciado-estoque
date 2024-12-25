@@ -7,13 +7,13 @@ export function read_name() {
         fs.readFile(filePath, 'utf8', (err, data) => {
             if (err) {
                 console.error('Erro ao ler o arquivo:', err);
-                reject(err); // Rejeita a promessa em caso de erro
+                reject(err);
                 return;
             }
 
             const name = data.split('\n')[0];
             console.log(`name: ${name}`);
-            resolve(name); // Resolve a promessa com o nome
+            resolve(name);
         });
     });
 }

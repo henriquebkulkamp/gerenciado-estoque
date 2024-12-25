@@ -14,16 +14,11 @@ let mainWindow;
 const port_4_g = parseInt(process.env.PORTA_4_G, 10);
 app.disableHardwareAcceleration();
 
-// const response = await axios.get(`http://localhost:${port_4_g}/setup`, {
-//     params: { name: 'Maria' }
-// });
-
 app.on('ready', async () => {
     mainWindow = new BrowserWindow({
         width: 800,
         height: 600,
         webPreferences: {
-            // preload: path.join(__dirname, 'preload.js'),
             nodeIntegration: true,
             enableRemoteModule: false,
             contextIsolation: false,
@@ -33,7 +28,7 @@ app.on('ready', async () => {
     const name = await read_name();
 
     if (name == "") {
-        mainWindow.loadFile(path.join(__dirname, 'tela', 'login', 'login.html'));
+        mainWindow.loadFile(path.join(__dirname, 'view', 'login', 'login.html'));
 
         ipcMain.handle('submit-name', async (event, inputName) => {
             if (!inputName) {
@@ -41,12 +36,12 @@ app.on('ready', async () => {
             } else {
                 console.log(`Nome recebido: ${inputName}`);
                 write_name(inputName);
-                mainWindow.loadFile(path.join(__dirname, 'tela', 'index.html'));
+                mainWindow.loadFile(path.join(__dirname, 'view', 'index.html'));
             }
         });
 
     } else {
-        mainWindow.loadFile(path.join(__dirname, 'tela', 'index.html'));
+        mainWindow.loadFile(path.join(__dirname, 'view', 'index.html'));
     }
 
     ipcMain.on('setup-table', async (event) => {
@@ -56,7 +51,6 @@ app.on('ready', async () => {
     
         console.log(response.data)
         event.reply('setup-table-response', response.data)
-        // Pega a resposta e faz um console.log
     });
 
     mainWindow.on('closed', () => {
@@ -86,7 +80,7 @@ app.on('ready', async () => {
 //     });
 
 //     // Ajuste para carregar o novo caminho do index.html
-//     mainWindow.loadFile(path.join(__dirname, 'tela', 'index.html'));
+//     mainWindow.loadFile(path.join(__dirname, 'view', 'index.html'));
 
 //     mainWindow.on('closed', () => {
 //         mainWindow = null;
@@ -140,6 +134,6 @@ app.on('ready', async () => {
 //             width: 800,
 //             height: 600,
 //         });
-//         mainWindow.loadFile(path.join(__dirname, 'tela', 'index.html'));
+//         mainWindow.loadFile(path.join(__dirname, 'view', 'index.html'));
 //     }
 // });
