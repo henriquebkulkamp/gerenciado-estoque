@@ -1,4 +1,3 @@
-// models/grupo_acesso.js
 import { DataTypes } from 'sequelize';
 import sequelize from './db.js';
 import Usuario from './usuario.js'; // Importa o modelo de Usuario

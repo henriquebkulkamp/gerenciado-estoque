@@ -1,7 +1,6 @@
-// models/produto.js
-import { DataTypes } from 'sequelize';
 import sequelize from './db.js';
 import GrupoAcesso from './grupo_acesso.js'; // Importa o modelo de GrupoAcesso
+import { DataTypes } from 'sequelize';
 
 const Produto = sequelize.define('Produto', {
     id: {

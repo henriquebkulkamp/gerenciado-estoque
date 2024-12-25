@@ -40,6 +40,15 @@ td {
     color:var(--color-products);
 }
 
+.hidden {
+    display: none;
+}
+
+.rotated {
+    transform: rotate(-90deg);
+}
+
+
 .new-item td {
     background-color: rgba(0, 0, 0, 0);
 }

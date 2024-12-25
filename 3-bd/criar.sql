@@ -27,6 +27,7 @@ CREATE TABLE produto (
     preco NUMERIC(10, 2) NOT NULL,     -- Preço do produto
     p NUMERIC(5, 2) NOT NULL,          -- Probabilidade de perder o produto (0-1)
     quantidade_demandada INTEGER NOT NULL, -- Quantidade demandada
+    quantidade_a_receber INTEGER NOT NULL,
     grupo_acesso_id INTEGER NOT NULL   -- Grupo de acesso ao qual o produto pertence
 );
 

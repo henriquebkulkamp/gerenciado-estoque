@@ -4,13 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; object-src 'none';"> -->
     <title>Tabela</title>
 </head>
 <body>
     <h1>Minha Tabela</h1>
     <section>
-        <img class="toggle" src="./angulo-pequeno-para-baixo.svg" onclick="toggleTable()"/>
+        <img class="toggle" src="./angulo-pequeno-para-baixo.svg" onclick="toggleTable(this)"/>
         <table id="main-table">
             <thead>
                 <tr>
@@ -21,7 +20,7 @@
                     <th>Situação</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="table-body">
                 <tr class="new-item">
                     <td><span class="square-add"></span>Mais</td>
                 </tr>
@@ -30,7 +29,52 @@
     </section>
     <script>
         const { ipcRenderer } = require('electron');
+
+        function toggleTable(self) {
+            const tableRows = document.querySelectorAll('#main-table tbody tr');
+
+            tableRows.forEach(row => {
+                row.classList.toggle('hidden');
+            });
+
+            self.classList.toggle('rotated')
+        };
+
         ipcRenderer.send('setup-table');
+
+        ipcRenderer.on('setup-table-response', (event, data) => {
+            if (data.error) {
+                console.error('Erro ao renderizar');
+                return;
+            }
+
+            const tableBody = document.getElementById('table-body');
+            tableBody.innerHTML = '';
+
+            data.forEach(item => {
+                const row = document.createElement('tr');
+                let nome = item.nome;
+                let qtde_em_estoque = item.qtde_atual
+                let qtde_minima = item.quantidade_demandada
+                let qtde_agendada_de_compra = item.quantidade_a_receber
+                let situacao = 'ok';
+                if (qtde_em_estoque + qtde_agendada_de_compra < item.limite_min) 
+                    situacao = 'baixo';
+
+                if (qtde_em_estoque + qtde_agendada_de_compra > item.limite_max)
+                    situacao = 'alto';
+
+                row.innerHTML = `
+                    <td>${nome}</td>
+                    <td>${qtde_em_estoque}</td>
+                    <td>${qtde_minima}</td>
+                    <td>${qtde_agendada_de_compra}</td>
+                    <td>${situacao}</td>
+                `;
+
+                tableBody.appendChild(row);
+            });
+        });
     </script>
 </body>
 </html>

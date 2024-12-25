@@ -50,14 +50,14 @@ app.on('ready', async () => {
     }
 
     ipcMain.on('setup-table', async (event) => {
-        console.log('recebemos');
         const response = await axios.get(`http://localhost:${port_4_g}/setup`, {
             params: { name }
         });
     
         console.log(response.data)
+        event.reply('setup-table-response', response.data)
         // Pega a resposta e faz um console.log
-    })
+    });
 
     mainWindow.on('closed', () => {
         mainWindow = null;

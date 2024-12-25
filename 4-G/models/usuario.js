@@ -1,6 +1,5 @@
-// models/usuario.js
-import { DataTypes } from 'sequelize';
 import sequelize from './db.js'; // Substitua com sua conexão Sequelize
+import { DataTypes } from 'sequelize';
 
 const Usuario = sequelize.define('Usuario', {
     id: {

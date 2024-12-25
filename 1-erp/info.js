@@ -1,5 +1,6 @@
 export default {
     "Info-geral": {
+        "c": 50,
         "wi": 0.6,
         "we": 0.4,
         "nopat": 1000000,
