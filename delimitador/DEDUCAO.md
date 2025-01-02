@@ -128,3 +128,58 @@ $<=> prob(z(a+c)) \cdot (eva(a+c) - cost) =$
 $prob(z(a)) \cdot (eva(x) - cost)$
 
 $\therefore prob(z(a+c)) \cdot (eva(a+c) - cost) = prob(z(a)) \cdot (eva(x) - cost)$
+
+---
+
+### 7. Cálculo Limite
+
+Deseja-se obter um x, tal que a x - perda esperada seja igual a quantidade mínima. 
+
+$x - x*p = pc$
+$=> x = \frac{pc}{1-p}$
+
+X está em quantidade absoluta, agora será feita uma conversão para reais extras.
+
+$(x - pc) *price$
+$= (\frac{pc}{1-p} - pc) \cdot price$
+$= (\frac{pc}{1-p} - \frac{(1-p)\cdot pc}{1-p}) \cdot price$
+$= (\frac{pc - pc + p \cdot pc}{1-p}) \cdot price$
+$= \frac{pc\cdot p}{1-p} \cdot price$
+
+$ \therefore limite = \frac{pc\cdot p}{1-p} \cdot price$
+
+---
+
+### 8. Forçar $z(a) = -10$
+$\frac{1}{2} \left( -\sqrt{-400 \, pc \, p \, price^2 - \frac{400 \, pc \, price^2}{1 - p} + \frac{400 \, pc \, price^2}{(1 - p)^2} - \frac{20000 \, price^2}{1 - p} + \frac{10000 \, price^2}{(1 - p)^2} + 10000 \, price^2} - price \left( -\frac{2 \, pc}{1 - p} + 2 \, pc - \frac{100}{1 - p} + 100 \right) \right)$
+
+Essa formula foi resolvida via: [Wolfram Alpha](https://www.wolframalpha.com/)
+
+---
+
+### 9. Encontrar b
+Se encontra b tal que $cost = eva(b)$:
+
+$-ki \cdot p - ke \cdot pl = nopat - ki \cdot (p+wi\cdot b) - ke \cdot (pl + we \cdot b)$
+
+$=> -ki\cdot p - ke\cdot pl = nopat -ki\cdot p - ki\cdot wi\cdot b - ke\cdot pl - ke \cdot we \cdot b$
+
+$=> 0 = nopat - (ki\cdot wi + ke\cdot we) \cdot b$
+$=> wacc \cdot b = nopat$
+$=> b = \frac{nopat}{wacc}$
+$ \therefore b = \frac{nopat}{wacc}$
+
+---
+
+### Ordem de complexidade de execução
+Como o algoritmo tem que, no pior dos casos, executar uma busca em bissecção do intervalo [0, $\frac{nopat}{wacc}$], até um intervalo [a, a+0.5].
+
+O Tamanho do intervalor inicial é $\frac{nopat}{wacc}$ e serão feitas iterações, que cortam o tamanho do intervalo pela metade até que o tamanho seja 0.5, portanto:
+
+$\frac{nopat}{wacc}\cdot 2^n = 0.5$
+$=> log_2(\frac{nopat}{wacc}\cdot 2^n) = log_2(0.5)$
+$=> log_2(\frac{nopat}{wacc}) + log_2(2^n) = -1$
+$=> n = -log_2(\frac{nopat}{wacc})-1$
+
+Portanto, em $\lceil log_2(\frac{nopat}{wacc}) \rceil + 1$ iterações se chega na resposta. E como cada iteração é O(1) pois executa apenas a calcula do resultado de uma funcao, um if e o calculo de uma media de dois valores.
+O Algoritmo possui O($\lceil log_2(\frac{nopat}{wacc}) \rceil + 1$) = O($log_2(n)$).

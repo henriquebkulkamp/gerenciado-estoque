@@ -93,8 +93,9 @@ app.get('/setup', (req, res) => {
                         let c = parseInt(prod.c, 10);
                         let pc = parseInt(prod.quantidade_demandada, 10);
                         let p = parseFloat(prod.p);
-                        let limit = pc * p / (1.0 - p);
-                        let interval = (c !== 0 && c < limit) ? c : Math.floor(limit);
+                        let price = parseFloat(prod.preco)
+                        let limit = pc * p / (1.0 - p) * price;
+                        let interval = (c != 0 && c < limit) ? c : Math.floor(limit);
                         console.log(`prod: ${prod.nome}; ${interval}`);
                         args[0] = interval;
                         args[5] = prod.quantidade_demandada;
@@ -113,7 +114,7 @@ app.get('/setup', (req, res) => {
     
                             console.log(`Resultado: ${Math.round(parseFloat(stdout))}`);
                             prod.limite_min = Math.round(parseFloat(stdout))
-                            prod.limite_max = prod.limite_min + args[0] // min + c
+                            prod.limite_max = prod.limite_min + interval // min + c
                             console.log('-=-=-=-=-=-=-=-=-=-=')
                             console.log(prod)
                             resolve(prod);

@@ -13,7 +13,7 @@
 
 Esses indicadores influenciam nos limites superiores e inferiores para se ter de estoque, por exemplo, se a empresa nao tem custo de capital, então é viável manter mais estoque parado. Em quanto que custo de capital muito elevados precionam esses limites para baixo, mais próximo do mínimo para manter as operações.
 
-## ADM:
+## ADM (Não implementado):
 É uma interface usuário com o banco de dados, onde são feitas as leitura, inserções, atualizações e deleções de produtos, usuários e quais grupos de usuários tem acesso a quais produtos.
 
 ## BD:

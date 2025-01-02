@@ -70,9 +70,28 @@ $L_{\text{est}}(a) = L_{\text{est}}(a+c)$
 Entradas:
 
     Todos os dados necessários para as funções anteriores
-    c: quantidade média de ordens de compra do produto mais um desvio padrão.
+    c: quantidade média de ordens de compra do produto mais um desvio padrão. Se atender as restrições.
+
+Restrições em c:
+- c não é 0.
+- c não é grande demais, é menor que o $limite$.
+
+O $limite$ é $\frac{pc\cdot p}{1-p} \cdot price$, caso c não atenda a alguma das duas restrições, c será substituido pelo $limite$
 
 Saídas:
 
     a: limite inferior da quantidade de estoque
     a+c: limite superior da quantidade de estoque
+
+Implementação:
+É feita uma busca pelo método da bissecção [a, b] até que a diferença entre esse $a$ e $b$ seja menor que 0.5, então é retornado $\frac{a+b}{2}$ arredondado para o inteiro mais próximo.
+O primeiro $a$ é escolhido tal que:
+- caso $z(0)$ seja menor ou igual a -10, uma fórmula que force $a$ a ser -10.
+- caso contrário $a=0$.
+Dessa forma $z(a)$ nunca será menor que -10, o que é importante pois para $z(a)$ muito pequenos, a fórmula que calcula o probabilidade é muito próxima de 0 e acaba arredondando para 0 -isso acontece para um $z(a)$ entre -20 e -30, o que acaba por "criar" uma raíz que não deveria existir.
+
+O primeiro $b$ é escolhido como:
+- $\frac{nopat}{wacc}$
+A partir desse ponto, vale mais apena parar as operações do que comprar mais estoque e deixar parado.
+
+Esse algoritmo para encontrar a solução tem O(log(N)), onde N é calcular $L_{est}$ em algum ponto.

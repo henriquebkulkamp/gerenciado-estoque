@@ -45,3 +45,49 @@ CREATE TABLE compra_produtos (
 
 CREATE INDEX idx_compra_produtos_id_btree
 ON compra_produtos(produto_id);
+
+
+
+-- TRIGGERS
+
+CREATE FUNCTION valida_produto()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Verificar se qtde_atual, preco e quantidade_demandada são positivos e diferentes de 0
+    IF NEW.qtde_atual <= 0 OR NEW.preco <= 0 OR NEW.quantidade_demandada <= 0 THEN
+        RAISE EXCEPTION 'Quantidade atual, preço e quantidade demandada devem ser positivos e diferentes de zero';
+    END IF;
+
+    -- Verificar se p está no intervalo (0, 1)
+    IF NEW.p <= 0 OR NEW.p >= 1 THEN
+        RAISE EXCEPTION 'A probabilidade (p) deve estar entre 0 e 1, excluindo os valores 0 e 1';
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Criar o gatilho para inserção e atualização
+CREATE TRIGGER verifica_produto
+BEFORE INSERT OR UPDATE ON produto
+FOR EACH ROW
+EXECUTE FUNCTION valida_produto();
+
+
+CREATE OR REPLACE FUNCTION valida_compra_produtos()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Verificar se qtde_compra e preco_medio são positivos e diferentes de 0
+    IF NEW.qtde_compra <= 0 OR NEW.preco_medio <= 0 THEN
+        RAISE EXCEPTION 'Quantidade de compra e preço médio devem ser positivos e diferentes de zero';
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Criar o gatilho para inserção e atualização
+CREATE TRIGGER verifica_compra_produtos
+BEFORE INSERT OR UPDATE ON compra_produtos
+FOR EACH ROW
+EXECUTE FUNCTION valida_compra_produtos();

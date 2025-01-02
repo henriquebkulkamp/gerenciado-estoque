@@ -1,42 +1,87 @@
-# Responsabilidades:
+# Gerenciador de Estoque
 
-## ERP:
-É um pseudo erp para enviar informações financeiras da empresa:
-- invs:     Total investido na empresa
-- p:        Dívidas com terceiros
-- pl:       Capital próprio
-- wi:       Percentual que o capital de terceiros representa do invs
-- we:       Percentual que o capital próprio representa do invs
-- nopat:    Receita das operações
-- ki:       Custo de capital de terceiros (percentual dos juros)
-- ke:       Custo de oportunidade
+Fornece o serviço de controle de estoque, auxilia indicando se tem muito ou pouco estoque e simula serviços de terceiros para teste.
 
-Esses indicadores influenciam nos limites superiores e inferiores para se ter de estoque, por exemplo, se a empresa nao tem custo de capital, então é viável manter mais estoque parado. Em quanto que custo de capital muito elevados precionam esses limites para baixo, mais próximo do mínimo para manter as operações.
+## Índice
 
-## ADM:
-É uma interface usuário com o banco de dados, onde são feitas as leitura, inserções, atualizações e deleções de produtos, usuários e quais grupos de usuários tem acesso a quais produtos.
+1. [Arquitetura](#arquitetura)
+2. [Tecnologias Utilizadas](#tecnologias-utilizadas)
+3. [Configuração e Instalação](#configuração-e-instalação)
+   - [Requisitos](#requisitos)
+   - [Backend](#backend)
+   - [Frontend](#frontend)
+4. [Uso](#uso)
+5. [Licença](#licença)
 
-## BD:
-É o banco de dados, contém as seguintes tabelas:
-### produto
-- id:               Identificador único
-- nome:             Nome do produto
-- qtde_atual:       Quantidade atual de produtos em estoque
-- preco:            Preço de uma unidade de produto
-- p:                Probabilidade individual de um determinado produto ser perdido
-- qtde_demandada:   Menor quantidade que precisa para manter as operações
-- grupo_acesso_id:  Qual grupo de usuários tem acesso ao produto
+---
 
-### usuario
-- id:       Identificador
-- nome:     Nome do usuário
+## Arquitetura
 
-### grupo_acesso
-- id            Identificador do grupo (não único)
-- usario_id:    Identificador do integrante do grupo
+```mermaid
+graph TD
+    1[ERP] --> 4{G}
+    2[ADM] --> 4{G}
+    4{G} --> 3[BD]
+    4{G} --> 6[DELIMITADOR]
+    6[DELIMITADOR] --> 4{G}
+    4{G} --> 5[FRONT]
 
-## G
-É uma interface entre serviços de terceiros e banco de dados com os usuários finais (não adiministrador).
+```
 
-## Front
-Contém a tela onde o usuário final usa o gerenciador de estoque
+[Descrição dos componentes](arquitetura.md)
+
+### O Único serviço prestado pelo servidor é o de setup
+Nelo, onde o frontend envia qual é o nome do usuário, e com base nisso o servidor compila as informações necessárias, primeiramente no banco de dados:
+1° Obtém quais são os grupos de acesso que o usuário tem acesso
+2° Obtém todos os produtos dos quais os grupos de acesso tem acesso
+3° Retorna nome, preço, probabilidade de perder 1, quantidade demandada, a receber e atual.
+Então obtém as informações financeiras da empresa do erp: c, wi, we, nopat, ki, ke, p, pl, invs.
+Com todas essas informações, ele envia para o [delimitador](./delimitador/DELIMITADOR.md), que retorna a quantidade minima e maxima ideal para cada produto.
+Após obter todas as informações necessárias, é enviado para o frontend as seguintes informações de cada produto:
+- nome
+- quantidade em estoque
+- quantidade a receber
+- quantidade demandada
+- situação
+onde situação indica se quantidade em estoque + a receber está abaixo do limite inferior, acima do limite superior ou está nos conformes e é renderizada no frontend.
+
+---
+
+## Tecnologias Utilizadas
+
+### Backend
+- [Express](https://expressjs.com)  
+- [Sequelize](https://sequelize.org)  
+- [Docker](https://www.docker.com)  
+
+### Frontend
+- [Electron](https://www.electronjs.org)  
+
+---
+
+## Uso
+
+1. Clone o repositório:
+   ```bash
+   git clone https://github.com/usuario/backend-repo.git
+   ```
+
+2. Suba os containers:
+    ```bash
+    sudo docker-compose up
+    ```
+
+3. Execute o setup.sh para criar as tabelas e inserir alguns valores
+    ```bash
+    sh setup.sh
+    ```
+
+4. Rode a aplicação:
+    ```bash
+    sh init.sh
+    ```
+
+
+## Licença
+
+MIT

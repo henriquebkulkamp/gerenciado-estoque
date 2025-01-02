@@ -41,7 +41,7 @@ VALUES
     ('Produto AF', 120, 18.00, 0.12, 30,3),     -- Grupo 3
     ('Produto AG', 180, 22.00, 0.04, 30,4),     -- Grupo 4
     ('Produto AH', 140, 28.00, 0.07, 30,4),     -- Grupo 4
-    ('Produto AI', 160, 14.00, 0.50, 30,1),     -- Grupo 1
+    ('Produto AI', 160, 14.00, 0.50, 700,1),     -- Grupo 1
     ('Produto AJ', 110, 35.00, 0.11, 30,2),     -- Grupo 2
     ('Produto AK', 220, 40.00, 0.06, 30,2),     -- Grupo 2
     ('Produto AL', 250, 50.00, 0.02, 30,3),     -- Grupo 3
@@ -55,13 +55,14 @@ VALUES
     ('Produto AT', 320, 32.00, 0.09, 30,3),     -- Grupo 3
     ('Produto AU', 140, 38.00, 0.07, 30,4),     -- Grupo 4
     ('Produto AV', 160, 45.00, 0.02, 30,4),     -- Grupo 4
-    ('Produto AW', 180, 42.00, 0.16, 00,1),     -- Grupo 1
+    ('Produto AW', 180, 42.00, 0.16, 50,1),     -- Grupo 1
     ('Produto AX', 200, 48.00, 0.01, 30,2),     -- Grupo 2
     ('Produto AY', 220, 55.00, 0.10, 30,2),     -- Grupo 2
     ('Produto AZ', 240, 60.00, 0.04, 30,3),     -- Grupo 3
     ('Produto BA', 260, 65.00, 0.05, 30,3),     -- Grupo 3
     ('Produto BB', 280, 70.00, 0.09, 30,4),     -- Grupo 4
-    ('Produto BC', 300, 75.00, 0.03, 30,4);     -- Grupo 4
+    ('Produto BC', 300, 75.00, 0.03, 30,4),     -- Grupo 4
+    ('Industrial', 2200000, 29.99, 0.01, 2000000, 1);
 
 INSERT INTO compra_produtos (produto_id, fornecedor, qtde_compra, preco_medio, dta_chegada)
     VALUES
