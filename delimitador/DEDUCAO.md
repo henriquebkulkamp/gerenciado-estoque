@@ -144,7 +144,7 @@ $= (\frac{pc}{1-p} - \frac{(1-p)\cdot pc}{1-p}) \cdot price$
 $= (\frac{pc - pc + p \cdot pc}{1-p}) \cdot price$
 $= \frac{pc\cdot p}{1-p} \cdot price$
 
-$ \therefore limite = \frac{pc\cdot p}{1-p} \cdot price$
+$\therefore limite = \frac{pc\cdot p}{1-p} \cdot price$
 
 ---
 
