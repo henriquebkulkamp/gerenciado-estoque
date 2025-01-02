@@ -23,23 +23,6 @@ app.get('/setup', (req, res) => {
             console.log('Resposta da requisição:', response.data);
             
             try {
-                // const produtos = await Produto.findAll({
-                //     attributes: ['id', 'nome', 'qtde_atual', 'preco', 'p', 'quantidade_demandada', 'quantidade_a_receber'], // Seleciona apenas os campos desejados de Produto
-                //     include: [{
-                //         model: GrupoAcesso,
-                //         as: 'grupo_acesso',
-                //         required: true,
-                //         attributes: [],
-                //         include: [{
-                //             model: Usuario,
-                //             as: 'usuario',
-                //             required: true,
-                //             attributes: [],
-                //             where: { nome: req.query.name },
-                //         }],
-                //     }],
-                // });
-
                 const produtos = await Produto.findAll({
                     attributes: [
                         'id',
@@ -55,6 +38,17 @@ app.get('/setup', (req, res) => {
                           WHERE cp.produto_id = "Produto".id
                         )`),
                             'quantidade_a_receber'
+                        ],
+                        [
+                        sequelize.literal(`(
+                            SELECT COALESCE(
+                            AVG(cp.qtde_compra * cp.preco_medio) + STDDEV(cp.qtde_compra * cp.preco_medio), 
+                            0.00
+                            )
+                            FROM compra_produtos AS cp
+                            WHERE cp.produto_id = "Produto".id
+                        )`),
+                        'c'
                         ]
                     ],
                     include: [
@@ -96,10 +90,16 @@ app.get('/setup', (req, res) => {
                 const modify_produto_promise = produtos.map(produto => {
                     return new Promise((resolve, reject) => {
                         let prod = produto.toJSON();
+                        let c = parseInt(prod.c, 10);
+                        let pc = parseInt(prod.quantidade_demandada, 10);
+                        let p = parseFloat(prod.p);
+                        let limit = pc * p / (1.0 - p);
+                        let interval = (c !== 0 && c < limit) ? c : Math.floor(limit);
+                        console.log(`prod: ${prod.nome}; ${interval}`);
+                        args[0] = interval;
                         args[5] = prod.quantidade_demandada;
                         args[6] = prod.p;
                         args[8] = prod.preco;
-                        // args[9] = prod.quantidade_a_receber;
     
                         execFile(binaryPath, args, (error, stdout, stderr) => {
                             if (error) {

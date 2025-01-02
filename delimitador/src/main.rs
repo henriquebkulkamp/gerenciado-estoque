@@ -90,28 +90,7 @@ fn main() {
     let we = pl / (passivo + pl);
     let wacc = wi * ki + we * ke;
 
-    // if pc as f64*p*price/(1.0-p) < c as f64 {
-    //     println!(
-    //         "{}",
-    //         bisection_method(0 as f64, (nopat / wacc)-pc as f64, |a| {
-    //             f_final(a, c, nopat, passivo, pl, wacc, pc, price, p, ki, ke)
-    //         })
-    //     );    
-    // }
-    // else {
-    //     println!(
-    //         "{}",
-    //         bisection_method(pc as f64*p*price/(1.0-p) - c as f64, (nopat / wacc)-pc as f64, |a| {
-    //             f_final(a, c, nopat, passivo, pl, wacc, pc, price, p, ki, ke)
-    //         }) / price + pc as f64
-    //     );
-    // }
-
-    let limit = (pc as f64) * p / (1.0 - p);
-
     // Determina o valor de interval
-    let interval: u32 = if (c as f64) < limit { c } else { limit as u32 };
-
     if z(0.0, pc, price, p) < -10.0 {
         let expr = 0.5 * (
             -((-400.0 * pc as f64 * p * price.powi(2)
@@ -125,13 +104,13 @@ fn main() {
         );
 
         println!("{}", bisection_method(expr, nopat as f64 / wacc as f64, |a| {
-                    f_final(a, interval, nopat, passivo, pl, wacc, pc, price, p, ki, ke)
+                    f_final(a, c, nopat, passivo, pl, wacc, pc, price, p, ki, ke)
             }) / price + pc as f64
         );
     }
     else {
         println!("{}", bisection_method(0.0, nopat as f64 / wacc as f64, |a| {
-                        f_final(a, interval, nopat, passivo, pl, wacc, pc, price, p, ki, ke)
+                        f_final(a, c, nopat, passivo, pl, wacc, pc, price, p, ki, ke)
                 }) / price + pc as f64
         );
     }

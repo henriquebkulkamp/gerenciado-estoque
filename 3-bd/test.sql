@@ -12,6 +12,14 @@ SELECT
         WHERE 
             cp.produto_id = p.id
     ) AS quantidade_a_receber,
+    (
+        SELECT 
+            COALESCE(AVG(cp.qtde_compra * cp.preco_medio) + STDDEV(cp.qtde_compra * cp.preco_medio), 0.00)
+        FROM 
+            compra_produtos AS cp
+        WHERE 
+            cp.produto_id = p.id
+    )  AS c,
     p.quantidade_demandada
 FROM 
     Produto AS p
@@ -22,15 +30,15 @@ INNER JOIN
 WHERE
     u.nome = 'Maria';
 
-SELECT *, (
-        SELECT 
-            COALESCE(SUM(cp.qtde_compra * cp.preco_medio), 0.00)
-        FROM 
-            compra_produtos AS cp
-        WHERE 
-            cp.produto_id = p.id
-    ) AS quantidade_a_receber,
-FROM Produto AS p;
+-- SELECT *, (
+--         SELECT 
+--             COALESCE(SUM(cp.qtde_compra * cp.preco_medio), 0.00)
+--         FROM 
+--             compra_produtos AS cp
+--         WHERE 
+--             cp.produto_id = p.id
+--     ) AS quantidade_a_receber,
+-- FROM Produto AS p;
 
 
 -- resultado esperado:
