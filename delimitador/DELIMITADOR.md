@@ -9,9 +9,8 @@ $$
 $$
 
 
-A função $L_{\text{est}}(x)$ representa o lucro estimado onde x é o estoque parado em reais.
-$L_{\text{est}}(x) = prob(z(x))*cost + (1-prob(z(x)))*(eva(x))$
-
+A função $L_{est}(x)$ representa o lucro estimado onde x é o estoque parado em reais.
+$L_{est}(x)$ = $prob(z(x))*cost + (1-prob(z(x)))*eva(x)$
 
 1. Função prob(x) (Probabilidade de Manutenção de Operações)
 
