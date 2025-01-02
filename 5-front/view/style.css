@@ -30,6 +30,10 @@ th {
     padding-left: 20px;
 }
 
+th tr td {
+    min-width: 80px;
+}
+
 td {
     text-align: center;
     position: relative;
@@ -74,5 +78,5 @@ td {
 }
 
 .toggle:hover {
-    content: url(botao-abrir-hover.svg)
+    content: url(open-button-hover.svg)
 }

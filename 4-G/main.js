@@ -1,88 +1,38 @@
-import Produto from './models/produto.js';
-import Usuario from './models/usuario.js';
-import GrupoAcesso from './models/grupo_acesso.js';
-import CompraProduto from './models/compra_produto.js';
-import sequelize from './models/db.js';
+import setup_product_querie from './models/queries/query.product.js'
 import axios from 'axios';
 import express from 'express';
-import dotenv from 'dotenv'; 
+import dotenv from 'dotenv';
 import { execFile } from 'child_process';
 dotenv.config({ path: '../.env' });
 const app = express();
 
-const port_1_erp = parseInt(process.env.PORTA_1_ERP, 10);
-const port_4_g = parseInt(process.env.PORTA_4_G, 10);
+const erp_port = parseInt(process.env.ERP_PORT, 10);
+const backend_port = parseInt(process.env.BACKEND_PORT, 10);
 
 app.use(express.json());
 
 app.get('/setup', (req, res) => {
     console.log(req.query.name)
-    // Faz a requisição para o ERP
-    axios.get(`http://localhost:${port_1_erp}/setup`)
+
+    axios.get(`http://localhost:${erp_port}/setup`)
         .then(async (response) => {
             console.log('Resposta da requisição:', response.data);
             
-            try {
-                const produtos = await Produto.findAll({
-                    attributes: [
-                        'id',
-                        'nome',
-                        'qtde_atual',
-                        'preco',
-                        'p',
-                        'quantidade_demandada',
-                        [
-                            sequelize.literal(`(
-                          SELECT COALESCE(SUM(cp.qtde_compra * cp.preco_medio), 0.00)
-                          FROM compra_produtos AS cp
-                          WHERE cp.produto_id = "Produto".id
-                        )`),
-                            'quantidade_a_receber'
-                        ],
-                        [
-                        sequelize.literal(`(
-                            SELECT COALESCE(
-                            AVG(cp.qtde_compra * cp.preco_medio) + STDDEV(cp.qtde_compra * cp.preco_medio), 
-                            0.00
-                            )
-                            FROM compra_produtos AS cp
-                            WHERE cp.produto_id = "Produto".id
-                        )`),
-                        'c'
-                        ]
-                    ],
-                    include: [
-                        {
-                            model: GrupoAcesso,
-                            as: 'grupo_acesso',
-                            required: true,
-                            attributes: [],
-                            include: [
-                                {
-                                    model: Usuario,
-                                    as: "usuario",
-                                    where: {
-                                        nome: 'Maria'
-                                    },
-                                    required: true
-                                }
-                            ]
-                        }
-                    ]
-                });
+            try {                
+                const produtos = await setup_product_querie();
                   
                   
                 
                 let args = [
-                    response.data['Info-geral'].c,
-                    response.data['Info-geral'].p,
-                    response.data['Info-geral'].pl,
+                    response.data['Financial indicators'].c,
+                    response.data['Financial indicators'].p,
+                    response.data['Financial indicators'].pl,
                     "0.12",
-                    response.data['Info-geral'].ki,
+                    response.data['Financial indicators'].ki,
                     "-", // pc
                     "-", // prob
-                    response.data['Info-geral'].nopat,
-                    "-" // preco
+                    response.data['Financial indicators'].nopat,
+                    "-" // price
                 ]
 
                 const binaryPath = '../delimitador/target/release/delimitador'
@@ -140,6 +90,6 @@ app.get('/setup', (req, res) => {
         });
 });
 
-app.listen(port_4_g, () => {
-    console.log(`> Running on http://localhost:${port_4_g}`);
+app.listen(backend_port, () => {
+    console.log(`> Running on http://localhost:${backend_port}`);
 });

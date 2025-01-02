@@ -1,8 +1,8 @@
 import { DataTypes } from 'sequelize';
 import sequelize from './db.js';
-import Usuario from './usuario.js'; // Importa o modelo de Usuario
+import Usuario from './user.js';
 
-const GrupoAcesso = sequelize.define('GrupoAcesso', {
+const AcessGroup = sequelize.define('AcessGroup', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -17,6 +17,6 @@ const GrupoAcesso = sequelize.define('GrupoAcesso', {
     timestamps: false,
 });
 
-GrupoAcesso.belongsTo(Usuario, { foreignKey: 'usuario_id', as: 'usuario' });
+AcessGroup.belongsTo(Usuario, { foreignKey: 'usuario_id', as: 'usuario' });
 
-export default GrupoAcesso;
+export default AcessGroup;

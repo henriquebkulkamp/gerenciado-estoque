@@ -1,8 +1,6 @@
 export default {
-    "Info-geral": {
+    "Financial indicators": {
         "c": 50,
-        "wi": 0.6,
-        "we": 0.4,
         "nopat": 1000000,
         "ki": 0.25,
         "ke": 0.15,

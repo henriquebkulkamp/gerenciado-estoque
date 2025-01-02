@@ -5,14 +5,14 @@ import dotenv from 'dotenv';
 dotenv.config({ path: '../.env' }); 
 
 const app = express();
-const port_1_erp = parseInt(process.env.PORTA_1_ERP, 10);
+const erp_port = parseInt(process.env.ERP_PORT, 10);
 
 app.get('/setup', (req, res) => {
     res.send(INFO)
 });
 
-app.listen(port_1_erp, () => {
-    console.log(`> Running on http://localhost:${port_1_erp}`);
+app.listen(erp_port, () => {
+    console.log(`> Running on http://localhost:${erp_port}`);
 });
 
 // DPS EU FAÇO A ATUALIZAÇÂO

@@ -1,6 +1,6 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
 import path from 'path';
-import { io } from 'socket.io-client';
+// import { io } from 'socket.io-client';
 import axios from 'axios';
 import { fileURLToPath } from 'url';
 import { read_name, write_name} from './get_name.js';
@@ -11,19 +11,18 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 let mainWindow;
-const port_4_g = parseInt(process.env.PORTA_4_G, 10);
+const backend_port = parseInt(process.env.BACKEND_PORT, 10);
 app.disableHardwareAcceleration();
 
 app.on('ready', async () => {
     mainWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
         webPreferences: {
             nodeIntegration: true,
             enableRemoteModule: false,
             contextIsolation: false,
         },
     });
+    mainWindow.maximize();
 
     const name = await read_name();
 
@@ -45,7 +44,7 @@ app.on('ready', async () => {
     }
 
     ipcMain.on('setup-table', async (event) => {
-        const response = await axios.get(`http://localhost:${port_4_g}/setup`, {
+        const response = await axios.get(`http://localhost:${backend_port}/setup`, {
             params: { name }
         });
     
@@ -61,13 +60,13 @@ app.on('ready', async () => {
 
 
 
-
+// Atualização Por Vir
 
 // const __filename = fileURLToPath(import.meta.url);
 // const __dirname = path.dirname(__filename);
 
 // let mainWindow;
-// const port_4_g = parseInt(process.env.PORTA_4_G, 10);
+// const backend_port = parseInt(process.env.BACKEND_PORT, 10);
 // app.disableHardwareAcceleration();
 
 // app.on('ready', () => {
@@ -87,7 +86,7 @@ app.on('ready', async () => {
 //     });
 
 //     // Requisição HTTP para o servidor Express assim que o app inicia
-//     axios.get(`http://localhost:${port_4_g}/setup`, {
+//     axios.get(`http://localhost:${backend_port}/setup`, {
 //         params: {
 //             name: nome
 //         }

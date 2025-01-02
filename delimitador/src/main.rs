@@ -91,8 +91,10 @@ fn main() {
     let wacc = wi * ki + we * ke;
 
     // Determina o valor de interval
+    let mut expr: f64 = 0.0;
+
     if z(0.0, pc, price, p) < -10.0 {
-        let expr = 0.5 * (
+        expr = 0.5 * (
             -((-400.0 * pc as f64 * p * price.powi(2)
                 - (400.0 * pc as f64 * price.powi(2)) / (1.0 - p)
                 + (400.0 * pc as f64 * price.powi(2)) / (1.0 - p).powi(2)
@@ -102,18 +104,10 @@ fn main() {
             .sqrt())
             - price * (-(2.0 * pc as f64) / (1.0 - p) + 2.0 * pc as f64 - 100.0 / (1.0 - p) + 100.0)
         );
+    } 
 
-        println!("{}", bisection_method(expr, nopat as f64 / wacc as f64, |a| {
-                    f_final(a, c, nopat, passivo, pl, wacc, pc, price, p, ki, ke)
+    println!("{}", bisection_method(expr, nopat as f64 / wacc as f64, |a| {
+                f_final(a, c, nopat, passivo, pl, wacc, pc, price, p, ki, ke)
             }) / price + pc as f64
-        );
-    }
-    else {
-        println!("{}", bisection_method(0.0, nopat as f64 / wacc as f64, |a| {
-                        f_final(a, c, nopat, passivo, pl, wacc, pc, price, p, ki, ke)
-                }) / price + pc as f64
-        );
-    }
-
-    
+        );    
 }
