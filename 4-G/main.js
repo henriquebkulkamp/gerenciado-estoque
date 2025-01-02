@@ -1,12 +1,13 @@
 import Produto from './models/produto.js';
 import Usuario from './models/usuario.js';
 import GrupoAcesso from './models/grupo_acesso.js';
+import CompraProduto from './models/compra_produto.js';
+import sequelize from './models/db.js';
 import axios from 'axios';
 import express from 'express';
 import dotenv from 'dotenv'; 
 import { execFile } from 'child_process';
 dotenv.config({ path: '../.env' });
-
 const app = express();
 
 const port_1_erp = parseInt(process.env.PORTA_1_ERP, 10);
@@ -22,22 +23,61 @@ app.get('/setup', (req, res) => {
             console.log('Resposta da requisição:', response.data);
             
             try {
+                // const produtos = await Produto.findAll({
+                //     attributes: ['id', 'nome', 'qtde_atual', 'preco', 'p', 'quantidade_demandada', 'quantidade_a_receber'], // Seleciona apenas os campos desejados de Produto
+                //     include: [{
+                //         model: GrupoAcesso,
+                //         as: 'grupo_acesso',
+                //         required: true,
+                //         attributes: [],
+                //         include: [{
+                //             model: Usuario,
+                //             as: 'usuario',
+                //             required: true,
+                //             attributes: [],
+                //             where: { nome: req.query.name },
+                //         }],
+                //     }],
+                // });
+
                 const produtos = await Produto.findAll({
-                    attributes: ['id', 'nome', 'qtde_atual', 'preco', 'p', 'quantidade_demandada', 'quantidade_a_receber'], // Seleciona apenas os campos desejados de Produto
-                    include: [{
-                        model: GrupoAcesso,
-                        as: 'grupo_acesso',
-                        required: true,
-                        attributes: [],
-                        include: [{
-                            model: Usuario,
-                            as: 'usuario',
+                    attributes: [
+                        'id',
+                        'nome',
+                        'qtde_atual',
+                        'preco',
+                        'p',
+                        'quantidade_demandada',
+                        [
+                            sequelize.literal(`(
+                          SELECT COALESCE(SUM(cp.qtde_compra * cp.preco_medio), 0.00)
+                          FROM compra_produtos AS cp
+                          WHERE cp.produto_id = "Produto".id
+                        )`),
+                            'quantidade_a_receber'
+                        ]
+                    ],
+                    include: [
+                        {
+                            model: GrupoAcesso,
+                            as: 'grupo_acesso',
                             required: true,
                             attributes: [],
-                            where: { nome: req.query.name },
-                        }],
-                    }],
+                            include: [
+                                {
+                                    model: Usuario,
+                                    as: "usuario",
+                                    where: {
+                                        nome: 'Maria'
+                                    },
+                                    required: true
+                                }
+                            ]
+                        }
+                    ]
                 });
+                  
+                  
                 
                 let args = [
                     response.data['Info-geral'].c,

@@ -27,9 +27,21 @@ CREATE TABLE produto (
     preco NUMERIC(10, 2) NOT NULL,     -- Preço do produto
     p NUMERIC(5, 2) NOT NULL,          -- Probabilidade de perder o produto (0-1)
     quantidade_demandada INTEGER NOT NULL, -- Quantidade demandada
-    quantidade_a_receber INTEGER NOT NULL,
     grupo_acesso_id INTEGER NOT NULL   -- Grupo de acesso ao qual o produto pertence
 );
 
 CREATE INDEX idx_produto_grupo_acesso_id_btree
 ON produto (grupo_acesso_id);
+
+CREATE TABLE compra_produtos (
+    id SERIAL PRIMARY KEY,
+    produto_id INTEGER NOT NULL,
+    fornecedor VARCHAR(45),
+    qtde_compra INTEGER NOT NULL,
+    preco_medio NUMERIC(10, 2) NOT NULL,
+    dta_chegada DATE NOT NULL,
+    CONSTRAINT fk_produto FOREIGN KEY (produto_id) REFERENCES produto (id) ON DELETE CASCADE
+);
+
+CREATE INDEX idx_compra_produtos_id_btree
+ON compra_produtos(produto_id);

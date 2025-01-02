@@ -4,9 +4,7 @@ fn bisection_method<F>(mut a: f64, mut b: f64, f: F) -> f64
 where
     F: Fn(f64) -> f64,
 {
-    // println!("a:{} -> {} b:{} -> {}", a, f(a), b, f(b));
     if f(a) * f(b) >= 0.0 {
-        // eprintln!("A função não muda de sinal no intervalo [a, b].");
         std::process::exit(1);
     }
     let mut midpoint: f64=0.0;
@@ -41,8 +39,7 @@ fn cost(ki: f64, passivo: f64, ke: f64, pl: f64) -> f64 {
 }
 
 fn z(a: f64, pc: u32, price: f64, p: f64) -> f64 {
-    // ((a/price - pc as f64) - a/price*p)/((a/price*p*(1.0-p))).sqrt()
-    (a * (1.0 - p) - price * p * pc as f64) / (p * (1.0 - p) * (a + price * pc as f64 * p)).sqrt()
+    (a * (1.0 - p) - price * p * pc as f64) / (price * p * (1.0 - p) * (a + price * pc as f64 * p)).sqrt()
 }
 
 fn aprox_integral(a: f64) -> f64 {
@@ -66,9 +63,6 @@ fn f_final(
     let eva_a = eva(a, nopat, passivo, pl, ke, ki, wacc);
     let eva_ac = eva(a+c as f64, nopat, passivo, pl, ke, ki, wacc);
 
-    // println!("a: {}", a);
-    // println!("cost: {}, eva(a): {}, eva(a+c): {}", cost_val, eva_a, eva_ac);
-    // println!("{}", aprox_integral(z(a, pc, price, p)));
     aprox_integral(z(a, pc, price, p)) * (eva_a - cost_val)
         - aprox_integral(z(a+c as f64, pc, price, p)) * (eva_ac - cost_val)
 }
@@ -96,22 +90,51 @@ fn main() {
     let we = pl / (passivo + pl);
     let wacc = wi * ki + we * ke;
 
-    if pc as f64*p*price/(1.0-p) < c as f64 {
-        println!(
-            "{}",
-            bisection_method(0 as f64, (nopat / wacc)-pc as f64, |a| {
-                f_final(a, c, nopat, passivo, pl, wacc, pc, price, p, ki, ke)
-            })
-        );    
-    }
-    else {
-        println!(
-            "{}",
-            bisection_method(pc as f64*p*price/(1.0-p) - c as f64, (nopat / wacc)-pc as f64, |a| {
-                f_final(a, c, nopat, passivo, pl, wacc, pc, price, p, ki, ke)
+    // if pc as f64*p*price/(1.0-p) < c as f64 {
+    //     println!(
+    //         "{}",
+    //         bisection_method(0 as f64, (nopat / wacc)-pc as f64, |a| {
+    //             f_final(a, c, nopat, passivo, pl, wacc, pc, price, p, ki, ke)
+    //         })
+    //     );    
+    // }
+    // else {
+    //     println!(
+    //         "{}",
+    //         bisection_method(pc as f64*p*price/(1.0-p) - c as f64, (nopat / wacc)-pc as f64, |a| {
+    //             f_final(a, c, nopat, passivo, pl, wacc, pc, price, p, ki, ke)
+    //         }) / price + pc as f64
+    //     );
+    // }
+
+    let limit = (pc as f64) * p / (1.0 - p);
+
+    // Determina o valor de interval
+    let interval: u32 = if (c as f64) < limit { c } else { limit as u32 };
+
+    if z(0.0, pc, price, p) < -10.0 {
+        let expr = 0.5 * (
+            -((-400.0 * pc as f64 * p * price.powi(2)
+                - (400.0 * pc as f64 * price.powi(2)) / (1.0 - p)
+                + (400.0 * pc as f64 * price.powi(2)) / (1.0 - p).powi(2)
+                - (20000.0 * price.powi(2)) / (1.0 - p)
+                + (10000.0 * price.powi(2)) / (1.0 - p).powi(2)
+                + 10000.0 * price.powi(2))
+            .sqrt())
+            - price * (-(2.0 * pc as f64) / (1.0 - p) + 2.0 * pc as f64 - 100.0 / (1.0 - p) + 100.0)
+        );
+
+        println!("{}", bisection_method(expr, nopat as f64 / wacc as f64, |a| {
+                    f_final(a, interval, nopat, passivo, pl, wacc, pc, price, p, ki, ke)
             }) / price + pc as f64
         );
     }
+    else {
+        println!("{}", bisection_method(0.0, nopat as f64 / wacc as f64, |a| {
+                        f_final(a, interval, nopat, passivo, pl, wacc, pc, price, p, ki, ke)
+                }) / price + pc as f64
+        );
+    }
 
-        
+    
 }

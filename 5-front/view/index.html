@@ -51,10 +51,12 @@
             data.forEach(item => {
                 const row = document.createElement('tr');
                 let nome = item.nome;
-                let qtde_em_estoque = item.qtde_atual
-                let qtde_minima = item.quantidade_demandada
-                let qtde_agendada_de_compra = item.quantidade_a_receber
+                let qtde_em_estoque = parseInt(item.qtde_atual, 10);
+                let qtde_minima = item.quantidade_demandada;
+                let qtde_agendada_de_compra = parseInt(item.quantidade_a_receber, 10);
+                
                 let situacao = 'ok';
+
                 if (qtde_em_estoque + qtde_agendada_de_compra < item.limite_min) 
                     situacao = 'baixo';
 

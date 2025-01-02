@@ -1,88 +1,78 @@
-1. Função f_prob (Probabilidade de Manutenção de Operações)
+# Delimitador
 
-Descrição: Modela a probabilidade de manter as operações com base em uma distribuição de Gauss, considerando que os eventos são independentes.
+Aqui estão presentes as funções, uma descrição dos inputs e output, clique [aqui](DEDUCAO.md) para ver as demonstrações das formulas e como foram obtidas
+
+O calcudo do limite inferior é a maximização variando em a, da integral da funcao de lucro economico estimado, indo de a até a + c, onde c é a quantidade média de ordens de compra do produto mais um desvio padrão.
+
+$$
+\max \int_a^{a+c} L_{\text{est}}(x) \, dx
+$$
+
+
+A função $L_{\text{est}}(x)$ representa o lucro estimado onde x é o estoque parado em reais.
+$L_{\text{est}}(x) = prob(z(x))*cost + (1-prob(z(x)))*(eva(x))$
+
+
+1. Função prob(x) (Probabilidade de Manutenção de Operações)
+
+Descrição: Modela a probabilidade de manter as operações em uma função $\phi(z)$
+
+2. Função $z(x)$
+
+Converte x reais a em estoque parado para uma versão em unidades e que possa ser utilizada na função de distribuição acumulada da normal padrão $\phi(z)$.
+
+$z(x) = \frac{x \cdot (1-p) - price \cdot p \cdot pc}{\sqrt{price \cdot p\cdot (1-p) \cdot (x+price \cdot pc )}}$
+
+Entradas:
+    
+    p: probabilidade de perder um único produto de forma independente
+    pc: quantidade mínima para se manter as operações
+    price: preco do produto em reais
+
+
+3. Função eva(x)
+
+Representa o eva caso seja deixado x reias a mais do que o mínimo para manter as operações e sem alterar as mesmas.
+
+$eva(x) = nopat - ki*p - ke*pl - wacc*x$
 
 Entradas:
 
-    Parâmetros do sistema (e.g., condições do mercado, nível de estoque).
+    nopat: o lucro das operações
+    ki: custo de capital de terceiros
+    ke: custo de capital próprio
+    wacc: custo de capital médio e ponderado
+    p: capital de terceiros
+    pl: capital próprio
 
-Saídas:
+3. cost:
 
-    Probabilidade de manutenção das operações (valor entre 0 e 1).
-
-Fórmula:
-P(Operac\co~es)=1σ2πe−(x−μ)22σ2
-P(Operac\c​o~es)=σ2π
-​1​e−2σ2(x−μ)2​
-
-Onde:
-
-    μ: Média
-    σ: Desvio padrão
-
-2. Função f_eva (Avaliação de Lucro)
-
-Descrição: Calcula o lucro baseado nas decisões de investimento, levando em consideração parâmetros como receita e custo.
-
-Entradas:
-
-    Valor do investimento
-    Variáveis de mercado
-    Projeções de vendas
-
-Saídas:
-
-    Valor do lucro estimado.
-
-Fórmula:
-Lucro=Receita−Custo
-Lucro=Receita−Custo
-
-Onde:
-
-    Receita = Quantidade Vendida * Preço
-    Custo = Custo fixo + Custo variável
-
-3. Função f_cost (Cálculo de Custo)
-
-Descrição: Calcula o custo total do sistema, levando em conta fatores fixos e variáveis.
+Descrição: Calcula o custo fixo da empresa, o que acontece caso a empresa pare as operações:
+$cost = -ki*p -ke*pl$
 
 Entradas:
 
     Custo fixo
     Custo variável (dependente de produção ou quantidade vendida)
 
-Saídas:
+4. Lucro Estimado:
 
-    Custo total.
+Descrição: Calcula a esperança de lucro ponderando entre a chance de parar as operações e ter como retorno cost e manter as operações e retornar o eva.
 
-Fórmula:
-Custototal=Custofixo+Custovariaˊvel
-Custototal​=Custofixo​+Custovariaˊvel​
-4. Função FF (Função Combinada)
+$L_{\text{est}}(x) = prob(z(x)) \cdot eva(x) + (1-prob(z(x))) \cdot cost$
 
-Descrição: Combinando as saídas das funções de probabilidade, avaliação e custo, FF calcula uma métrica de viabilidade financeira do sistema.
-
-Entradas:
-
-    Saídas de f_prob, f_eva, e f_cost.
-
-Saídas:
-
-    Métrica única de viabilidade financeira (ex: retorno sobre investimento).
-
-Fórmula:
-FF=fprob×feva−fcost
-FF=fp​rob×fe​va−fc​ost
 5. Monitoramento de Estoque Externo
 
-Descrição: Rastreia os valores de estoque de sistemas externos e verifica se estão dentro dos limites definidos.
+Descrição: Calcula os limites minimos e maximos para se ter em estoque, encontrando $a$ tal que:
+$L_{\text{est}}(a) = L_{\text{est}}(a+c)$
+
 
 Entradas:
 
-    Dados de estoque
-    Limites definidos de operação
+    Todos os dados necessários para as funções anteriores
+    c: quantidade média de ordens de compra do produto mais um desvio padrão.
 
 Saídas:
 
-    Relatório de status: "Dentro dos Limites" ou "Fora dos Limites".
+    a: limite inferior da quantidade de estoque
+    a+c: limite superior da quantidade de estoque
